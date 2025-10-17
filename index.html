@@ -119,6 +119,7 @@
         /* To prevent layout shifts */
         [data-group] { transition: opacity 0.3s ease-out; }
         [data-group].hidden { position: absolute; opacity: 0; pointer-events: none; }
+        .comparison-slider.hidden { display: none; } /* Changed for gallery functionality */
 
         /* FAQ Accordion Styles */
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
@@ -638,7 +639,10 @@
     <div id="receipt-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
         <div class="bg-gray-50 rounded-lg shadow-2xl max-w-sm w-full modal-content">
             <div id="receipt-content" class="bg-white p-6 rounded-t-lg">
-                <div class="text-center mb-6"><h2 class="text-2xl font-bold text-blue-600">iCleaners</h2><p class="text-gray-500">Order Confirmation</p></div>
+                <div class="text-center mb-6">
+                    <img src="https://static.wixstatic.com/media/cfe6d1_7e3b6f000ddd41ad998065ae9557645c~mv2.png" alt="iCleaners Logo" class="h-10 w-auto mx-auto mb-2">
+                    <p class="text-gray-500">Order Confirmation</p>
+                </div>
                 <div class="text-center mb-6"><p class="text-gray-500 text-sm">Order #<span id="receipt-order-number" class="font-semibold mono"></span></p><p class="text-gray-500 text-sm" id="receipt-date"></p></div>
                 <div class="border-t border-b border-dashed py-4 space-y-2 text-sm">
                     <div class="flex justify-between"><span class="text-gray-600">Plan:</span><span id="receipt-plan" class="font-semibold text-gray-800"></span></div>
@@ -735,16 +739,6 @@
             cardModal.classList.remove('hidden');
             registrationForm.reset();
         });
-        
-        document.getElementById('download-card-btn').addEventListener('click', () => {
-             const cardElement = document.getElementById('membership-card');
-             html2canvas(cardElement).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [53.98, 85.6] });
-                pdf.addImage(imgData, 'PNG', 0, 0, 85.6, 53.98);
-                pdf.save('iCleaners-Membership-Card.pdf');
-             });
-        });
 
         document.getElementById('proceed-to-payment-btn').addEventListener('click', () => {
             cardModal.classList.add('hidden');
@@ -812,11 +806,103 @@
         const receiptModal = document.getElementById('receipt-modal');
         orderForm.addEventListener('submit', function(event) { event.preventDefault(); const fd = new FormData(orderForm); const on = `iC-${Math.floor(100000 + Math.random() * 900000)}`, od = new Date().toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' }), sp = fd.get('plan'), cp = fd.get('contact_person'), fa = `${fd.get('apt_number')}, ${fd.get('street_name')}`; let t = (currentOrderType === 'member') ? 'Membership' : `KES ${Number(planSelect.options[planSelect.selectedIndex].dataset.price).toLocaleString()}`; document.getElementById('receipt-order-number').textContent = on; document.getElementById('receipt-date').textContent = od; document.getElementById('receipt-plan').textContent = sp; document.getElementById('receipt-contact').textContent = cp; document.getElementById('receipt-address').textContent = fa; document.getElementById('receipt-total').textContent = t; document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`Order: ${on}, Plan: ${sp}, Total: ${t}`)}`; receiptModal.classList.remove('hidden'); orderForm.reset(); toggleOrderType('member'); });
         document.getElementById('close-receipt-btn').addEventListener('click', () => receiptModal.classList.add('hidden'));
-        document.getElementById('download-receipt-btn').addEventListener('click', () => { html2canvas(document.getElementById('receipt-content')).then(canvas => { const imgData = canvas.toDataURL('image/png'), pdf = new jsPDF('p', 'mm', [80, 140]); pdf.addImage(imgData, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), (canvas.height * pdf.internal.pageSize.getWidth()) / canvas.width); pdf.save(`iCleaners-Receipt-${document.getElementById('receipt-order-number').textContent}.pdf`); }); });
+
+        // --- NEW: Function to handle PDF downloads ensuring images are loaded ---
+        async function captureElementAsPdf(elementId, filename, pdfOptions) {
+            const element = document.getElementById(elementId);
+            if (!element) {
+                console.error(`Element with ID "${elementId}" not found.`);
+                return;
+            }
+
+            // Temporarily make the modal content visible for capture if it's part of a hidden modal
+            const parentModal = element.closest('.modal');
+            const wasHidden = parentModal && parentModal.classList.contains('hidden');
+            if (wasHidden) {
+                parentModal.style.opacity = '0';
+                parentModal.style.display = 'flex';
+                element.style.opacity = '1';
+            }
+
+            try {
+                // Wait for all images inside the element to load
+                const images = element.querySelectorAll('img');
+                const promises = [];
+                images.forEach(img => {
+                    if (!img.complete) {
+                        promises.push(new Promise((resolve, reject) => {
+                            img.onload = resolve;
+                            img.onerror = reject;
+                        }));
+                    }
+                });
+                await Promise.all(promises);
+
+                // Add a small delay for QR code to render from API
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                const canvas = await html2canvas(element, { useCORS: true, allowTaint: true, scale: 2 });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF(pdfOptions);
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save(filename);
+
+            } catch (error) {
+                console.error('Error capturing element or generating PDF:', error);
+            } finally {
+                // Re-hide the modal if it was originally hidden
+                if (wasHidden) {
+                    parentModal.style.opacity = '';
+                    parentModal.style.display = '';
+                }
+            }
+        }
+        
+        // --- UPDATED: PDF download event listeners ---
+        document.getElementById('download-card-btn').addEventListener('click', () => {
+             const cardName = document.getElementById('card-name').textContent.trim().replace(/\s+/g, '-');
+             captureElementAsPdf(
+                'membership-card',
+                `iCleaners-Card-${cardName || 'member'}.pdf`,
+                { orientation: 'landscape', unit: 'mm', format: [53.98, 85.6] }
+             );
+        });
+        
+        document.getElementById('download-receipt-btn').addEventListener('click', () => {
+             const orderNumber = document.getElementById('receipt-order-number').textContent;
+             captureElementAsPdf(
+                'receipt-content',
+                `iCleaners-Receipt-${orderNumber}.pdf`,
+                { orientation: 'p', unit: 'mm', format: [80, 140] }
+             );
+        });
+
+        // --- Before/After Image Slider Logic ---
         document.querySelectorAll('.comparison-slider').forEach(slider => { const b = slider.querySelector('.before-image'), h = slider.querySelector('.slider-handle'); let d = false; function m(x){ const r = slider.getBoundingClientRect(); let n = x - r.left; if (n < 0) n = 0; if (n > r.width) n = r.width; const p = (n / r.width) * 100; h.style.left = `${p}%`; b.style.width = `${p}%`; } h.addEventListener('mousedown', (e) => { e.preventDefault(); d = true; }); h.addEventListener('touchstart', (e) => { e.preventDefault(); d = true; }); window.addEventListener('mouseup', () => d = false); window.addEventListener('touchend', () => d = false); window.addEventListener('mousemove', (e) => { if (d) m(e.clientX); }); window.addEventListener('touchmove', (e) => { if (d) m(e.touches[0].clientX); });});
+        
+        // --- NEW: Before/After Gallery Tab Logic ---
+        const galleryTabs = document.getElementById('gallery-tabs');
+        const sliders = document.querySelectorAll('.comparison-slider[data-slider]');
+        galleryTabs.addEventListener('click', (e) => {
+            const targetButton = e.target.closest('.gallery-tab');
+            if (!targetButton) return;
+            galleryTabs.querySelectorAll('.gallery-tab').forEach(tab => tab.classList.remove('active'));
+            targetButton.classList.add('active');
+            const targetSliderName = targetButton.dataset.target;
+            sliders.forEach(slider => {
+                slider.classList.toggle('hidden', slider.dataset.slider !== targetSliderName);
+            });
+        });
+
+        // --- Scroll Animations & Social Proof ---
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 }); document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         let cP = 0; function sSP() { const p = [{ t: 'A host just booked a clean!', d: 'For a 2-bed apartment in Kilimani.' }, { t: 'Cleaner finished a job!', d: '1-bedroom studio in Westlands is now sparkling.' }, { t: 'New monthly subscriber!', d: 'A shortlet manager in Lavington just joined.' }, { t: 'Instant dispatch!', d: 'Cleaner en-route to a house on Ngong Road.' }][cP]; document.getElementById('proof-title').textContent = p.t; document.getElementById('proof-details').textContent = p.d; cP = (cP + 1) % 4; } setTimeout(sSP, 1000); setInterval(sSP, 7000);
         const fab = document.getElementById('fab'); window.addEventListener('scroll', () => { fab.classList.toggle('opacity-0', window.scrollY <= 300); fab.classList.toggle('scale-0', window.scrollY <= 300); });
     </script>
 </body>
 </html>
+
