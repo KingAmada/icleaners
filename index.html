@@ -96,6 +96,794 @@
         .slider-icon { width: 40px; height: 40px; background-color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); color: #3b82f6; }
 
         /* Watermark */
+        .watermark-container { position: relative; }
+        .watermark { position: absolute; bottom: 10px; right: 10px; width: 100px; height: auto; opacity: 0.7; z-index: 5; pointer-events: none; }
+
+        /* Modal styles */
+        .modal { transition: opacity 0.3s ease-out; }
+        .modal-content { transition: all 0.3s ease-out; }
+        .modal.hidden .modal-content { opacity: 0; transform: translateY(-20px) scale(0.95); }
+        .modal:not(.hidden) .modal-content { opacity: 1; transform: translateY(0) scale(1); }
+        .legal-modal-content h3 { font-size: 1.25rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #1f2937; }
+        .legal-modal-content p { margin-bottom: 1rem; color: #4b5563; }
+        .legal-modal-content ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 1rem; color: #4b5563; }
+
+        /* Gallery Tab Styles */
+        .gallery-tab { cursor: pointer; padding: 0.5rem 1rem; border-radius: 9999px; transition: all 0.2s ease-in-out; }
+        .gallery-tab.active { background-color: #3b82f6; color: white; }
+        
+        /* Order form toggle styles */
+        .order-toggle { transition: all 0.2s ease-in-out; }
+        .order-toggle.active { background-color: #3b82f6; border-color: #3b82f6; color: white; }
+
+        /* To prevent layout shifts */
+        [data-group] { transition: opacity 0.3s ease-out; }
+        [data-group].hidden { position: absolute; opacity: 0; pointer-events: none; }
+
+        /* FAQ Accordion Styles */
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        
+        /* Pricing Toggle */
+        .pricing-toggle-bg { transition: background-color 0.3s ease; }
+        .pricing-toggle-handle { transition: transform 0.3s ease; }
+        input:checked + .pricing-toggle-bg .pricing-toggle-handle { transform: translateX(100%); }
+
+        /* Membership Card Style */
+        .membership-card {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            aspect-ratio: 85.6 / 53.98;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-white shadow-sm sticky top-0 z-40 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#">
+                <img src="https://static.wixstatic.com/media/cfe6d1_7e3b6f000ddd41ad998065ae9557645c~mv2.png" alt="iCleaners Logo" class="h-10 w-auto">
+            </a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#services" class="text-gray-600 hover:text-blue-600 transition">Services</a>
+                <a href="#plans" class="text-gray-600 hover:text-blue-600 transition">Plans</a>
+                <a href="#about" class="text-gray-600 hover:text-blue-600 transition">About Us</a>
+                <a href="#contact" class="text-gray-600 hover:text-blue-600 transition">Contact</a>
+                <a href="#order" class="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-700 transition shadow">Order Now</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden">
+                <i data-feather="menu" class="text-gray-700"></i>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#services" class="block py-2 text-gray-600 hover:text-blue-600">Services</a>
+            <a href="#plans" class="block py-2 text-gray-600 hover:text-blue-600">Plans</a>
+            <a href="#about" class="block py-2 text-gray-600 hover:text-blue-600">About Us</a>
+            <a href="#contact" class="block py-2 text-gray-600 hover:text-blue-600">Contact</a>
+            <a href="#order" class="block mt-4 bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg hover:bg-blue-700 transition shadow text-center">Order Now</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-bg text-white h-[60vh] md:h-[80vh] flex items-center">
+             <video autoplay loop muted playsinline id="hero-video">
+                <source src="https://video.wixstatic.com/video/cfe6d1_0989c7b9cdfc435384818eb1bc67060c/480p/mp4/file.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="hero-content container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">Guest Checking Out in 30 Mins?</h1>
+                <p class="text-lg md:text-2xl mb-8 max-w-3xl mx-auto text-blue-100">Get your property sparkling clean, faster than a 2-minute man. We dispatch a cleaner in <span class="font-bold text-cyan-300">under 10 minutes</span>.</p>
+                <a href="#order" class="bg-pink-500 text-white font-bold px-10 py-4 rounded-lg text-lg hover:bg-pink-600 transition shadow-lg transform hover:scale-105">Book Your Instant Clean</a>
+                <div class="mt-8 text-sm text-blue-200">Join 500+ Airbnb Hosts in Nairobi who trust us for rapid turnovers.</div>
+            </div>
+        </section>
+
+        <!-- Stats & Social Proof Bar -->
+        <section class="bg-slate-800 text-white">
+            <div class="container mx-auto px-6 py-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="fade-in"><h3 class="text-3xl md:text-4xl font-bold">1,500+</h3><p class="text-slate-400">Cleans This Month</p></div>
+                    <div class="fade-in"><h3 class="text-3xl md:text-4xl font-bold">98%</h3><p class="text-slate-400">Host Satisfaction</p></div>
+                    <div class="fade-in"><h3 class="text-3xl md:text-4xl font-bold">8 Mins</h3><p class="text-slate-400">Avg. Dispatch Time</p></div>
+                    <div class="fade-in"><h3 class="text-3xl md:text-4xl font-bold">5-Star</h3><p class="text-slate-400">Higher Guest Ratings</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-20 bg-white">
+             <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 fade-in">More Than Just a Mop and Bucket</h2>
+                <p class="text-gray-600 mb-12 max-w-2xl mx-auto fade-in">We provide a comprehensive cleaning solution designed for the demands of short-term rentals.</p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow fade-in"><div class="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6"><i data-feather="wind" class="w-8 h-8"></i></div><h3 class="text-xl font-bold mb-2">Full-Service Cleaning</h3><p class="text-gray-600">From sparkling floors to spotless kitchens and bathrooms. We handle everything.</p></div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow fade-in"><div class="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6"><i data-feather="archive" class="w-8 h-8"></i></div><h3 class="text-xl font-bold mb-2">Laundry & Ironing</h3><p class="text-gray-600">Fresh linens and towels are a must. We wash, dry, and iron on-site or off-site.</p></div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow fade-in"><div class="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6"><i data-feather="trash-2" class="w-8 h-8"></i></div><h3 class="text-xl font-bold mb-2">Garbage Disposal</h3><p class="text-gray-600">We don't just clean; we clear. All trash is properly disposed of, leaving your property pristine.</p></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Before and After Showcase -->
+        <section class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 class="text-3xl md:text-4xl font-bold mb-4 fade-in">The iCleaners Transformation</h2>
+                 <p class="text-gray-600 mb-8 max-w-2xl mx-auto fade-in">Our cleaners capture before & after photos for every job. See the difference for yourself.</p>
+                 <div class="flex justify-center flex-wrap gap-2 md:gap-4 mb-8 fade-in" id="gallery-tabs">
+                     <button class="gallery-tab active" data-target="livingroom">Living Room</button>
+                     <button class="gallery-tab" data-target="kitchen">Kitchen</button>
+                     <button class="gallery-tab" data-target="bedroom">Bedroom</button>
+                     <button class="gallery-tab" data-target="dining">Dining</button>
+                     <button class="gallery-tab" data-target="toilet">Bathroom</button>
+                 </div>
+                 <div class="max-w-3xl mx-auto shadow-2xl fade-in">
+                    <div class="comparison-slider watermark-container" data-slider="livingroom">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_a813eae9c43549cc9bdd31e6c4dc103c~mv2.jpg" alt="Clean Living Room" class="comparison-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_76e4c11dea48443bb901cf4cd2da3aa1~mv2.jpg" alt="Dirty Living Room" class="comparison-image before-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_7e3b6f000ddd41ad998065ae9557645c~mv2.png" alt="iCleaners Logo Watermark" class="watermark">
+                        <div class="slider-handle"><div class="slider-icon"><i data-feather="move"></i></div></div>
+                    </div>
+                    <div class="comparison-slider hidden watermark-container" data-slider="kitchen">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_0390a4c60744482f8498c8cf7ae47b11~mv2.jpg" alt="Clean Kitchen" class="comparison-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_699d3cbf5848473ab15beb6edf586b7f~mv2.jpg" alt="Dirty Kitchen" class="comparison-image before-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_7e3b6f000ddd41ad998065ae9557645c~mv2.png" alt="iCleaners Logo Watermark" class="watermark">
+                        <div class="slider-handle"><div class="slider-icon"><i data-feather="move"></i></div></div>
+                    </div>
+                    <div class="comparison-slider hidden watermark-container" data-slider="bedroom">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_5c7619e8613b433ba37b75f48cec993e~mv2.jpg" alt="Clean Room" class="comparison-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_d46ed82d160e478c8c1515385b5e86de~mv2.jpg" alt="Dirty Room" class="comparison-image before-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_7e3b6f000ddd41ad998065ae9557645c~mv2.png" alt="iCleaners Logo Watermark" class="watermark">
+                        <div class="slider-handle"><div class="slider-icon"><i data-feather="move"></i></div></div>
+                    </div>
+                    <div class="comparison-slider hidden watermark-container" data-slider="dining">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_06d216a1a1724616912c35710f1fe2c6~mv2.jpg" alt="Clean Dining Table" class="comparison-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_e01c5a89e61d4db7ace74c1dfac021bc~mv2.jpg" alt="Dirty Dining Table" class="comparison-image before-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_7e3b6f000ddd41ad998065ae9557645c~mv2.png" alt="iCleaners Logo Watermark" class="watermark">
+                        <div class="slider-handle"><div class="slider-icon"><i data-feather="move"></i></div></div>
+                    </div>
+                    <div class="comparison-slider hidden watermark-container" data-slider="toilet">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_6c7a791319f74861a4c690e94dd79244~mv2.jpg" alt="Clean Toilet" class="comparison-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_8c44d10481f549d387795539cc68dd64~mv2.jpg" alt="Dirty Toilet" class="comparison-image before-image">
+                        <img src="https://static.wixstatic.com/media/cfe6d1_7e3b6f000ddd41ad998065ae9557645c~mv2.png" alt="iCleaners Logo Watermark" class="watermark">
+                        <div class="slider-handle"><div class="slider-icon"><i data-feather="move"></i></div></div>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Plans Section -->
+        <section id="plans" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 fade-in">Flexible Memberships for Every Host</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto fade-in">Choose the plan that fits your needs. No hidden charges, just sparkling clean results.</p>
+                </div>
+                
+                <!-- Pricing Toggle -->
+                <div class="flex justify-center items-center space-x-4 mb-10 fade-in">
+                    <span class="font-semibold text-gray-700">Standard (8 Cleans/Month)</span>
+                    <label for="pricing-toggle" class="relative inline-block w-14 h-8 cursor-pointer">
+                        <input type="checkbox" id="pricing-toggle" class="sr-only">
+                        <div class="pricing-toggle-bg absolute inset-0 bg-blue-500 rounded-full"></div>
+                        <div class="pricing-toggle-handle absolute top-1 left-1 bg-white w-6 h-6 rounded-full shadow"></div>
+                    </label>
+                    <span class="font-semibold text-gray-700">Unlimited Cleans</span>
+                </div>
+
+                <div id="pricing-cards" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Plan 1 -->
+                    <div class="plan-card border rounded-lg p-6 text-center shadow-sm hover:shadow-lg transition-shadow fade-in bg-white" data-price-standard="5000" data-price-unlimited="6500">
+                        <h3 class="text-xl font-bold mb-2">Studio / 1 Bedroom</h3>
+                        <p class="text-gray-500 mb-4">Perfect for compact city apartments.</p>
+                        <div class="text-4xl font-bold text-blue-600 mb-2 price">KES 5,000</div>
+                        <p class="plan-frequency text-lg font-normal text-gray-500 mb-4">/mo</p>
+                        <div class="text-left bg-green-50 text-green-700 p-3 rounded-lg text-sm font-semibold mb-4">
+                            🎁 Includes 1 FREE Deep Clean Monthly!
+                        </div>
+                        <button class="member-btn w-full bg-blue-100 text-blue-600 font-semibold py-3 rounded-lg hover:bg-blue-200 transition">Become a Member</button>
+                    </div>
+                     <!-- Plan 2 -->
+                     <div class="plan-card border-2 border-blue-600 rounded-lg p-6 text-center shadow-lg transform md:scale-105 fade-in bg-white relative" data-price-standard="8000" data-price-unlimited="10400">
+                        <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</div>
+                        <h3 class="text-xl font-bold mb-2">2 & 3 Bedroom</h3>
+                        <p class="text-gray-500 mb-4">Ideal for family-sized Airbnbs.</p>
+                        <div class="text-4xl font-bold text-blue-600 mb-2 price">KES 8,000</div>
+                        <p class="plan-frequency text-lg font-normal text-gray-500 mb-4">/mo</p>
+                        <div class="text-left bg-green-50 text-green-700 p-3 rounded-lg text-sm font-semibold mb-4">
+                            🎁 Includes 1 FREE Deep Clean Monthly!
+                        </div>
+                        <button class="member-btn w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">Become a Member</button>
+                    </div>
+                     <!-- Plan 3 -->
+                     <div class="plan-card border rounded-lg p-6 text-center shadow-sm hover:shadow-lg transition-shadow fade-in bg-white md:col-span-2 lg:col-span-1" data-price-standard="10000" data-price-unlimited="13000">
+                        <h3 class="text-xl font-bold mb-2">Specialized Homes</h3>
+                        <p class="text-gray-500 mb-4">Homes with kids, bachelors, etc.</p>
+                        <div class="text-4xl font-bold text-blue-600 mb-2 price">KES 10,000</div>
+                        <p class="plan-frequency text-lg font-normal text-gray-500 mb-4">/mo</p>
+                        <div class="text-left bg-green-50 text-green-700 p-3 rounded-lg text-sm font-semibold mb-4">
+                           🎁 Includes 1 FREE Deep Clean Monthly!
+                        </div>
+                        <button class="member-btn w-full bg-blue-100 text-blue-600 font-semibold py-3 rounded-lg hover:bg-blue-200 transition">Become a Member</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Section -->
+        <section id="order" class="py-20 animated-gradient text-white">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 fade-in">Request a Clean</h2>
+                    <p class="text-blue-100 max-w-2xl mx-auto fade-in">Whether you're a member or need a one-time clean, we're ready to dispatch.</p>
+                </div>
+                <div class="max-w-4xl mx-auto bg-white/90 backdrop-blur-sm text-gray-800 rounded-lg shadow-2xl p-8 md:p-12 fade-in">
+                    <form id="order-form">
+                        <div class="flex justify-center border border-gray-300 rounded-lg p-1 mb-8 bg-gray-100">
+                             <button type="button" id="member-toggle" class="order-toggle active w-1/2 p-2 rounded-md font-semibold" data-type="member">I'm a Member</button>
+                             <button type="button" id="onetime-toggle" class="order-toggle w-1/2 p-2 rounded-md font-semibold" data-type="onetime">One-Time Clean</button>
+                        </div>
+
+                        <div id="form-fields-container" class="relative">
+                            <!-- Member Fields -->
+                            <div data-group="member">
+                                <label for="membership_number" class="block text-sm font-medium text-gray-700 mb-1">Membership Number</label>
+                                <input type="text" id="membership_number" name="membership_number" placeholder="Enter your membership number" class="w-full p-3 border border-gray-300 rounded-lg">
+                            </div>
+
+                            <!-- One-Time Fields -->
+                            <div data-group="onetime" class="hidden">
+                                <p class="text-center text-sm text-gray-600 bg-blue-50 p-3 rounded-lg mb-4">One-time dispatch for non-members. <button type="button" class="member-btn font-semibold text-blue-600 hover:underline">Want a membership?</button></p>
+                            </div>
+                        </div>
+
+                        <hr class="my-6 border-gray-300">
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="plan" class="block text-sm font-medium text-gray-700 mb-1">Select Service</label>
+                                <select id="plan" name="plan" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"></select>
+                            </div>
+                            <div>
+                                 <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                <input type="text" id="city" name="city" value="Nairobi" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="street_name" class="block text-sm font-medium text-gray-700 mb-1">Street Name</label>
+                                <input type="text" id="street_name" name="street_name" placeholder="e.g., Ngong Road" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                            </div>
+                            <div>
+                                <label for="apt_number" class="block text-sm font-medium text-gray-700 mb-1">House / Apt Number</label>
+                                <input type="text" id="apt_number" name="apt_number" placeholder="e.g., Jabavu Court, Apt C5" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                            </div>
+                            <div>
+                                 <label for="access_codes" class="block text-sm font-medium text-gray-700 mb-1">Access Instructions</label>
+                                <input type="text" id="access_codes" name="access_codes" placeholder="e.g., Gate code is 1234#" class="w-full p-3 border border-gray-300 rounded-lg">
+                            </div>
+                             <div>
+                                <label for="contact_person" class="block text-sm font-medium text-gray-700 mb-1">Contact Person</label>
+                                <input type="text" id="contact_person" name="contact_person" placeholder="Full Name" class="w-full p-3 border border-gray-300 rounded-lg" required>
+                            </div>
+                            <div>
+                                 <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                <input type="tel" id="phone_number" name="phone_number" placeholder="e.g. 07..." class="w-full p-3 border border-gray-300 rounded-lg" required>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <label for="terms_agree" class="flex items-start">
+                                <input type="checkbox" id="terms_agree" name="terms_agree" class="h-5 w-5 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" required>
+                                <span class="ml-3 text-sm text-gray-600">I have read and agree to the <button type="button" class="font-semibold text-blue-600 hover:underline" data-modal-trigger="terms">Terms & Conditions</button> and <button type="button" class="font-semibold text-blue-600 hover:underline" data-modal-trigger="privacy">Privacy Policy</button>.</span>
+                            </label>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <button type="submit" class="w-full bg-pink-500 text-white font-bold text-lg p-4 rounded-lg hover:bg-pink-600 transition shadow-md">Dispatch a Cleaner NOW</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FAQ Section -->
+        <section id="faq" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 fade-in">Frequently Asked Questions</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto fade-in">Have questions? We've got answers. Here are some of the most common queries we get.</p>
+                </div>
+                <div class="max-w-3xl mx-auto space-y-4 fade-in" id="faq-accordion">
+                    <!-- FAQ Item 1 -->
+                    <div class="border rounded-lg bg-gray-50">
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5 font-semibold text-lg">
+                            <span>How does the 10-minute dispatch work?</span>
+                            <i data-feather="plus" class="transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-answer px-5 pb-5 text-gray-600">
+                            <p>Our system uses geolocation to identify the closest available iCleaner to your property. Once you place an order, the request is instantly broadcast to vetted cleaners in your vicinity. The first qualified cleaner to accept is dispatched immediately. On average, a cleaner accepts and is on their way within 8 minutes of your request.</p>
+                        </div>
+                    </div>
+                     <!-- FAQ Item 2 -->
+                    <div class="border rounded-lg bg-gray-50">
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5 font-semibold text-lg">
+                            <span>What are the membership options?</span>
+                            <i data-feather="plus" class="transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-answer px-5 pb-5 text-gray-600">
+                           <p>We offer two main membership tiers:</p>
+                           <ul class="list-disc ml-5 mt-2 space-y-2">
+                               <li><b>Standard Membership:</b> This is our base plan which includes 8 cleaning sessions per month (roughly twice a week). It's perfect for regular upkeep.</li>
+                               <li><b>Unlimited Membership:</b> For hosts with high turnover, this plan offers unlimited cleaning requests for a fixed monthly fee, which is 30% more than the standard rate.</li>
+                           </ul>
+                           <p class="mt-2"><b>Great news!</b> All our members, regardless of their tier, receive one <b>FREE deep cleaning service</b> once every month as a thank you for being part of the iCleaners family.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 3 -->
+                    <div class="border rounded-lg bg-gray-50">
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5 font-semibold text-lg">
+                            <span>Are the cleaners trustworthy and vetted?</span>
+                            <i data-feather="plus" class="transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-answer px-5 pb-5 text-gray-600">
+                            <p>Absolutely. The safety and security of your property is our top priority. Every cleaner on the iCleaners platform undergoes a rigorous vetting process, including background checks, reference verification, and a practical skills test. They are professional, reliable, and bound by strict confidentiality agreements.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 4 -->
+                    <div class="border rounded-lg bg-gray-50">
+                         <button class="faq-question w-full flex justify-between items-center text-left p-5 font-semibold text-lg">
+                            <span>Do I need to provide cleaning supplies?</span>
+                            <i data-feather="plus" class="transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-answer px-5 pb-5 text-gray-600">
+                            <p>Our cleaners come equipped with standard, eco-friendly cleaning supplies and equipment. However, if you have specific products you'd like them to use (e.g., for wood floors or marble countertops), please leave them in a visible location and add instructions in the "Access Instructions" field when booking.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 5 -->
+                     <div class="border rounded-lg bg-gray-50">
+                         <button class="faq-question w-full flex justify-between items-center text-left p-5 font-semibold text-lg">
+                            <span>What if I'm not satisfied with the cleaning?</span>
+                            <i data-feather="plus" class="transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-answer px-5 pb-5 text-gray-600">
+                            <p>We have a satisfaction guarantee. All cleaners take "before and after" photos for quality assurance. If you are not satisfied with the service, please contact us within 24 hours of the cleaning, and we will arrange for a free re-clean of the specific areas that were missed. Your satisfaction is our benchmark for success.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us -->
+        <section id="about" class="py-20 bg-gray-100">
+             <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="fade-in"><img src="https://static.wixstatic.com/media/cfe6d1_9f8606be15ee4afa81f3a2ebdffd4383~mv2.jpg" class="rounded-lg shadow-2xl" alt="iCleaners Management Team in Office"></div>
+                    <div class="fade-in"><h2 class="text-3xl md:text-4xl font-bold mb-6">Built for Hosts, by Hosts.</h2><p class="text-gray-600 mb-4">iCleaners was born from the frustration of managing short-term rentals in Nairobi. We know the stress of last-minute bookings and the mad dash to clean a property between check-out and check-in. Standard cleaning companies just weren't fast enough.</p><p class="text-gray-600 mb-4">So we built the solution we needed: an on-demand platform with a network of vetted, professional cleaners ready to be dispatched at a moment's notice. Our tech ensures the nearest cleaner is assigned, guaranteeing the fastest turnaround time.</p><p class="text-gray-600 font-semibold">Our mission is simple: to help you maximize your occupancy, get better reviews, and run your Airbnb business stress-free.</p></div>
+                </div>
+             </div>
+        </section>
+        
+         <!-- Contact Us -->
+        <section id="contact" class="py-20 bg-white">
+             <div class="container mx-auto px-6 text-center">
+                  <h2 class="text-3xl md:text-4xl font-bold mb-4 fade-in">Have Questions?</h2>
+                  <p class="text-gray-600 mb-12 max-w-2xl mx-auto fade-in">Our team is ready to help you with custom plans, special requests, or any inquiries.</p>
+                  <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8">
+                      <a href="tel:+254748118655" class="flex items-center bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow fade-in"><i data-feather="phone-call" class="text-blue-600 mr-3"></i><span class="text-lg font-semibold text-gray-700">+254 748 118 655</span></a>
+                      <a href="mailto:hello@icleaners.co.ke" class="flex items-center bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow fade-in"><i data-feather="mail" class="text-blue-600 mr-3"></i><span class="text-lg font-semibold text-gray-700">hello@icleaners.co.ke</span></a>
+                  </div>
+             </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                <div class="col-span-2 lg:col-span-1">
+                    <img src="https://static.wixstatic.com/media/cfe6d1_7e3b6f000ddd41ad998065ae9557645c~mv2.png" alt="iCleaners Logo White" class="h-10 w-auto mb-4" style="filter: brightness(0) invert(1);">
+                    <p class="text-gray-400 text-sm">Your on-demand cleaning partner for Airbnb, shortlets, and homes across Nairobi.</p>
+                </div>
+                 <div><h4 class="font-semibold mb-4">Quick Links</h4><ul class="space-y-2 text-sm"><li><a href="#services" class="text-gray-400 hover:text-white">Services</a></li><li><a href="#plans" class="text-gray-400 hover:text-white">Pricing</a></li><li><a href="#order" class="text-gray-400 hover:text-white">Order Now</a></li><li><a href="#faq" class="text-gray-400 hover:text-white">FAQs</a></li></ul></div>
+                 <div><h4 class="font-semibold mb-4">Popular Areas</h4><ul class="space-y-2 text-sm"><li><a href="#" class="text-gray-400 hover:text-white">Kilimani Cleaning</a></li><li><a href="#" class="text-gray-400 hover:text-white">Ngong Road</a></li><li><a href="#" class="text-gray-400 hover:text-white">Westlands</a></li><li><a href="#" class="text-gray-400 hover:text-white">Lavington</a></li></ul></div>
+                 <div><h4 class="font-semibold mb-4">Legal</h4><ul class="space-y-2 text-sm"><li><button data-modal-trigger="terms" class="text-gray-400 hover:text-white text-left">Terms of Service</button></li><li><button data-modal-trigger="privacy" class="text-gray-400 hover:text-white text-left">Privacy Policy</button></li></ul></div>
+                 <div class="col-span-2 lg:col-span-1"><h4 class="font-semibold mb-4">Follow Us</h4><div class="flex space-x-4"><a href="#" class="text-gray-400 hover:text-white"><i data-feather="facebook"></i></a><a href="#" class="text-gray-400 hover:text-white"><i data-feather="instagram"></i></a><a href="#" class="text-gray-400 hover:text-white"><i data-feather="twitter"></i></a></div></div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-gray-500"><p>&copy; 2024 iCleaners Kenya. All Rights Reserved.</p></div>
+        </div>
+    </footer>
+    
+    <!-- Modals -->
+    <!-- Membership Registration Modal -->
+    <div id="registration-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h2 class="text-xl font-bold">Become an iCleaners Member</h2>
+                <button class="modal-close-btn text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <form id="registration-form" class="flex-grow overflow-y-auto">
+                <div class="p-6 space-y-4">
+                    <!-- Personal Details -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="reg-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" id="reg-name" name="name" class="mt-1 w-full p-2 border border-gray-300 rounded-md" required>
+                        </div>
+                        <div>
+                            <label for="reg-phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                            <input type="tel" id="reg-phone" name="phone" class="mt-1 w-full p-2 border border-gray-300 rounded-md" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="reg-email" class="block text-sm font-medium text-gray-700">Email Address <span class="text-gray-500">(Optional)</span></label>
+                        <input type="email" id="reg-email" name="email" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                     <div>
+                        <label for="reg-membership-type" class="block text-sm font-medium text-gray-700">Membership Type</label>
+                        <select id="reg-membership-type" name="membership_type" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
+                            <option value="Standard">Standard (8 Cleans/Month)</option>
+                            <option value="Unlimited">Unlimited</option>
+                        </select>
+                    </div>
+
+                    <hr class="my-4">
+                    <h3 class="text-lg font-semibold">Your Properties</h3>
+                    <div id="apartments-list" class="space-y-4">
+                        <!-- Dynamic apartment fields will be injected here -->
+                    </div>
+                    <button type="button" id="add-apartment-btn" class="w-full text-sm text-blue-600 font-semibold border-2 border-dashed border-gray-300 rounded-lg p-3 hover:bg-gray-50 flex items-center justify-center">
+                        <i data-feather="plus" class="w-4 h-4 mr-2"></i> Add Another Property
+                    </button>
+                </div>
+                <div class="p-4 bg-gray-50 border-t">
+                    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">Generate My Membership Card</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Membership Card Modal -->
+    <div id="card-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+        <div class="modal-content max-w-md w-full text-center">
+            <div id="membership-card" class="membership-card rounded-xl shadow-2xl p-6 text-white flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 border-4 border-white/20 rounded-full"></div>
+                <div class="absolute -bottom-12 -left-8 w-40 h-40 border-2 border-white/10 rounded-full"></div>
+                
+                <div class="flex justify-between items-start z-10">
+                    <img src="https://static.wixstatic.com/media/cfe6d1_7e3b6f000ddd41ad998065ae9557645c~mv2.png" alt="iCleaners Logo White" class="h-8 w-auto" style="filter: brightness(0) invert(1);">
+                </div>
+                <div class="z-10 text-center">
+                    <p class="text-sm opacity-80">Member Number</p>
+                    <p id="card-member-number" class="text-2xl font-bold tracking-widest mono">ICN-46375</p>
+                </div>
+                <div class="flex justify-between items-end z-10">
+                    <div class="text-left">
+                        <p class="text-sm opacity-80">Cardholder</p>
+                        <p id="card-name" class="text-xl font-semibold uppercase"></p>
+                    </div>
+                     <div class="bg-white p-1 rounded-md">
+                        <img id="card-qr-code" src="https://placehold.co/80x80/ffffff/333333?text=QR" class="w-20 h-20" alt="QR Code">
+                     </div>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-2 gap-4">
+                <button id="download-card-btn" class="w-full bg-gray-600 text-white font-semibold py-3 rounded-lg hover:bg-gray-700 transition flex items-center justify-center"><i data-feather="download" class="w-4 h-4 mr-2"></i>Download</button>
+                <button id="proceed-to-payment-btn" class="w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition">Proceed to Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-white rounded-lg shadow-2xl max-w-md w-full text-center p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Complete Your Membership</h2>
+            <p class="text-gray-600 mb-6">You've made the right decision, your property deserves the iCleaners touch!</p>
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h3 class="font-semibold text-lg text-gray-700">M-Pesa Payment Details</h3>
+                <p class="text-gray-500 text-sm mb-4">Please use the details below to complete your payment.</p>
+                <p class="text-lg">Paybill / Till Number: <span class="font-bold text-blue-600">iCleaners LTD</span></p>
+                <p class="text-lg">Account / Phone: <span class="font-bold text-blue-600">0748118655</span></p>
+            </div>
+            <button class="modal-close-btn mt-6 w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">Finish</button>
+        </div>
+    </div>
+
+
+    <!-- Terms & Conditions Modal -->
+    <div id="terms-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h2 class="text-xl font-bold">Terms & Conditions</h2>
+                <button class="modal-close-btn text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto legal-modal-content">
+                <p><strong>Last updated: October 17, 2025</strong></p>
+                <p>Please read these Terms and Conditions carefully before using the iCleaners website (the "Service").</p>
+                 <h3>3. Bookings, Payments, and Cancellations</h3>
+                <ul>
+                    <li><strong>One-Time Cleans:</strong> Payment is due at the time of service confirmation. Prices are as listed on the platform.</li>
+                    <li><strong>Memberships:</strong> Membership fees are billed monthly in advance. Standard memberships include 8 cleaning sessions per month. Unlimited memberships are subject to fair use. We reserve the right to investigate and limit service if usage is deemed excessive or abusive.</li>
+                    <li><strong>Cancellation:</strong> If you cancel a confirmed booking less than 2 hours before the scheduled time, a cancellation fee may apply.</li>
+                </ul>
+                <h3>4. Satisfaction Guarantee</h3>
+                <p>We offer a 24-hour satisfaction guarantee. If you are not satisfied with any aspect of the cleaning service, please contact us with details and photographic evidence within 24 hours. We will arrange for a re-clean of the specific areas that were missed, free of charge.</p>
+            </div>
+            <div class="p-4 bg-gray-50 border-t"><button class="modal-close-btn w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition">Close</button></div>
+        </div>
+    </div>
+    
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+         <div class="modal-content bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h2 class="text-xl font-bold">Privacy Policy</h2>
+                <button class="modal-close-btn text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto legal-modal-content">
+                <p><strong>Last updated: October 17, 2025</strong></p>
+                <p>This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service.</p>
+                 <h3>3. Data Sharing and Disclosure</h3>
+                <p>We do not sell your personal data. We only share your information with Cleaners to perform the service and with authorities if required by law.</p>
+            </div>
+            <div class="p-4 bg-gray-50 border-t"><button class="modal-close-btn w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition">Close</button></div>
+        </div>
+    </div>
+
+
+    <!-- Social Proof Pop-up -->
+    <div id="social-proof" class="social-proof-popup fixed bottom-5 left-5 bg-white rounded-lg shadow-xl p-4 flex items-center max-w-sm z-50 border border-gray-200" style="opacity: 0;"><div class="bg-blue-100 text-blue-600 p-2 rounded-full mr-4"><i data-feather="zap" class="w-6 h-6"></i></div><div><p class="font-bold text-sm text-gray-800" id="proof-title">A host just ordered a clean!</p><p class="text-xs text-gray-500" id="proof-details">For a 2-bed apartment in Kilimani.</p></div></div>
+
+    <!-- Floating Action Button -->
+    <a href="#order" id="fab" title="Quick Order" class="fixed bottom-6 right-6 bg-pink-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:bg-pink-600 z-30 opacity-0 transform scale-0 transition-opacity transition-transform duration-300"><i data-feather="zap" class="w-8 h-8"></i></a>
+    
+    <!-- Receipt Modal -->
+    <div id="receipt-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+        <div class="bg-gray-50 rounded-lg shadow-2xl max-w-sm w-full modal-content">
+            <div id="receipt-content" class="bg-white p-6 rounded-t-lg">
+                <div class="text-center mb-6"><h2 class="text-2xl font-bold text-blue-600">iCleaners</h2><p class="text-gray-500">Order Confirmation</p></div>
+                <div class="text-center mb-6"><p class="text-gray-500 text-sm">Order #<span id="receipt-order-number" class="font-semibold mono"></span></p><p class="text-gray-500 text-sm" id="receipt-date"></p></div>
+                <div class="border-t border-b border-dashed py-4 space-y-2 text-sm">
+                    <div class="flex justify-between"><span class="text-gray-600">Plan:</span><span id="receipt-plan" class="font-semibold text-gray-800"></span></div>
+                    <div class="flex justify-between"><span class="text-gray-600">For:</span><span id="receipt-contact" class="font-semibold text-gray-800"></span></div>
+                    <div class="flex justify-between"><span class="text-gray-600">Address:</span><span id="receipt-address" class="font-semibold text-gray-800 text-right"></span></div>
+                </div>
+                <div class="flex justify-between items-center font-bold text-lg my-4"><span class="text-gray-800">Total</span><span id="receipt-total" class="mono text-blue-600"></span></div>
+                <div class="flex flex-col items-center justify-center bg-gray-50 p-4 rounded-lg"><img id="qr-code" src="https://placehold.co/150x150/ffffff/333333?text=QR" alt="QR Code" class="w-32 h-32 rounded-md"><p class="text-xs text-gray-500 mt-2">Scan for order details</p></div>
+                <div class="text-center mt-6"><p class="text-sm text-gray-600 font-semibold">Thank you for your order!</p><p class="text-xs text-gray-500">Our cleaner is on the way. A representative will call you shortly to confirm.</p></div>
+            </div>
+             <div class="p-4 bg-gray-100 rounded-b-lg grid grid-cols-2 gap-3">
+                <button id="download-receipt-btn" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition flex items-center justify-center"><i data-feather="download" class="w-4 h-4 mr-2"></i>Download</button>
+                <button id="close-receipt-btn" class="w-full bg-gray-600 text-white font-semibold py-3 rounded-lg hover:bg-gray-700 transition">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Initialize JS libraries ---
+        const { jsPDF } = window.jspdf;
+
+        // --- Feather Icons & Mobile Menu ---
+        feather.replace();
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.querySelectorAll('#mobile-menu a, #fab, .member-btn').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // --- Membership Registration Logic ---
+        const registrationModal = document.getElementById('registration-modal');
+        const cardModal = document.getElementById('card-modal');
+        const paymentModal = document.getElementById('payment-modal');
+        const registrationForm = document.getElementById('registration-form');
+        const apartmentsList = document.getElementById('apartments-list');
+        let apartmentCount = 0;
+
+        function addApartmentField() {
+            apartmentCount++;
+            const fieldHTML = `
+                <div class="apartment-field border p-3 rounded-lg relative">
+                    <button type="button" class="remove-apartment-btn absolute top-2 right-2 text-red-500 hover:text-red-700">&times;</button>
+                    <p class="font-semibold mb-2">Property ${apartmentCount}</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Type</label>
+                            <select name="apt_type_${apartmentCount}" class="mt-1 w-full p-2 border border-gray-300 rounded-md" required>
+                                <option>Studio</option><option>1 Bedroom</option><option>2 Bedroom</option><option>3 Bedroom</option><option>House</option>
+                            </select>
+                        </div>
+                         <div>
+                            <label class="block text-sm font-medium text-gray-700">Apt/House No.</label>
+                            <input type="text" name="apt_no_${apartmentCount}" class="mt-1 w-full p-2 border border-gray-300 rounded-md" required>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700">Street Name</label>
+                            <input type="text" name="apt_street_${apartmentCount}" class="mt-1 w-full p-2 border border-gray-300 rounded-md" required>
+                        </div>
+                    </div>
+                </div>`;
+            apartmentsList.insertAdjacentHTML('beforeend', fieldHTML);
+        }
+        
+        document.getElementById('add-apartment-btn').addEventListener('click', addApartmentField);
+        apartmentsList.addEventListener('click', e => {
+            if (e.target.classList.contains('remove-apartment-btn')) {
+                e.target.closest('.apartment-field').remove();
+            }
+        });
+        
+        document.querySelectorAll('.member-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                apartmentsList.innerHTML = ''; // Clear previous fields
+                apartmentCount = 0;
+                addApartmentField(); // Add the first one
+                registrationModal.classList.remove('hidden');
+            });
+        });
+
+        registrationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(registrationForm);
+            const name = formData.get('name');
+            const memberNumber = `ICN-${Math.floor(100000 + Math.random() * 900000)}`;
+
+            document.getElementById('card-name').textContent = name;
+            document.getElementById('card-member-number').textContent = memberNumber;
+
+            const qrData = `Name: ${name}\nMember No: ${memberNumber}`;
+            document.getElementById('card-qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}`;
+
+            registrationModal.classList.add('hidden');
+            cardModal.classList.remove('hidden');
+            registrationForm.reset();
+        });
+        
+        document.getElementById('download-card-btn').addEventListener('click', () => {
+             const cardElement = document.getElementById('membership-card');
+             html2canvas(cardElement).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [53.98, 85.6] });
+                pdf.addImage(imgData, 'PNG', 0, 0, 85.6, 53.98);
+                pdf.save('iCleaners-Membership-Card.pdf');
+             });
+        });
+
+        document.getElementById('proceed-to-payment-btn').addEventListener('click', () => {
+            cardModal.classList.add('hidden');
+            paymentModal.classList.remove('hidden');
+        });
+
+        // --- Dynamic Order Form Logic ---
+        const memberToggle = document.getElementById('member-toggle');
+        const onetimeToggle = document.getElementById('onetime-toggle');
+        const planSelect = document.getElementById('plan');
+        let currentOrderType = 'member';
+
+        const memberPlans = [
+            { text: 'Standard - Studio / 1 Bed', value: 'Standard - Studio / 1 Bed' }, { text: 'Unlimited - Studio / 1 Bed', value: 'Unlimited - Studio / 1 Bed' },
+            { text: 'Standard - 2 & 3 Bed', value: 'Standard - 2 & 3 Bed' }, { text: 'Unlimited - 2 & 3 Bed', value: 'Unlimited - 2 & 3 Bed' },
+            { text: 'Standard - Specialized Home', value: 'Standard - Specialized Home' }, { text: 'Unlimited - Specialized Home', value: 'Unlimited - Specialized Home' }
+        ];
+        const onetimePlans = [
+            { text: '1 Bed Dispatch - KES 799', value: '1 Bed Dispatch', price: 799 }, { text: '2 & 3 Bed Dispatch - KES 999', value: '2 & 3 Bed Dispatch', price: 999 },
+        ];
+
+        function updatePlanOptions(type) {
+            planSelect.innerHTML = '';
+            const plans = type === 'member' ? memberPlans : onetimePlans;
+            plans.forEach(plan => {
+                const option = document.createElement('option');
+                option.value = plan.value;
+                option.textContent = plan.text;
+                if (plan.price) option.dataset.price = plan.price;
+                planSelect.appendChild(option);
+            });
+        }
+
+        function toggleOrderType(type) {
+            currentOrderType = type;
+            memberToggle.classList.toggle('active', type === 'member');
+            onetimeToggle.classList.toggle('active', type !== 'member');
+            document.querySelectorAll('[data-group]').forEach(group => group.classList.toggle('hidden', group.dataset.group !== type));
+            updatePlanOptions(type);
+        }
+
+        memberToggle.addEventListener('click', () => toggleOrderType('member'));
+        onetimeToggle.addEventListener('click', () => toggleOrderType('onetime'));
+        toggleOrderType('member');
+
+        // --- Pricing Toggle Logic ---
+        const pricingToggle = document.getElementById('pricing-toggle');
+        pricingToggle.addEventListener('change', () => {
+            const isUnlimited = pricingToggle.checked;
+            document.querySelectorAll('.plan-card').forEach(card => {
+                const standardPrice = card.dataset.priceStandard;
+                const unlimitedPrice = card.dataset.priceUnlimited;
+                card.querySelector('.price').textContent = `KES ${Number(isUnlimited ? unlimitedPrice : standardPrice).toLocaleString()}`;
+                card.querySelector('.plan-frequency').textContent = isUnlimited ? '/mo for Unlimited' : '/mo for 8 Cleans';
+            });
+        });
+        document.querySelectorAll('.plan-card .plan-frequency').forEach(el => el.textContent = '/mo for 8 Cleans');
+
+        // --- Sliders, Modals, FAQ, and other existing logic ---
+        document.querySelectorAll('[data-modal-trigger]').forEach(trigger => trigger.addEventListener('click', (e) => { e.preventDefault(); document.getElementById(`${trigger.dataset.modalTrigger}-modal`).classList.remove('hidden'); }));
+        document.querySelectorAll('.modal-close-btn').forEach(button => button.addEventListener('click', () => button.closest('.modal').classList.add('hidden')));
+        document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); }));
+        document.getElementById('faq-accordion').addEventListener('click', (e) => { const q = e.target.closest('.faq-question'); if(q) { const a = q.nextElementSibling, i = q.querySelector('i'), o = !a.style.maxHeight; document.querySelectorAll('#faq-accordion .faq-answer').forEach(ans => ans.style.maxHeight = null); document.querySelectorAll('#faq-accordion .faq-question i').forEach(ic => ic.style.transform = 'rotate(0deg)'); if(o){ a.style.maxHeight = a.scrollHeight + "px"; i.style.transform = 'rotate(45deg)';}}});
+        const orderForm = document.getElementById('order-form');
+        const receiptModal = document.getElementById('receipt-modal');
+        orderForm.addEventListener('submit', function(event) { event.preventDefault(); const fd = new FormData(orderForm); const on = `iC-${Math.floor(100000 + Math.random() * 900000)}`, od = new Date().toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' }), sp = fd.get('plan'), cp = fd.get('contact_person'), fa = `${fd.get('apt_number')}, ${fd.get('street_name')}`; let t = (currentOrderType === 'member') ? 'Membership' : `KES ${Number(planSelect.options[planSelect.selectedIndex].dataset.price).toLocaleString()}`; document.getElementById('receipt-order-number').textContent = on; document.getElementById('receipt-date').textContent = od; document.getElementById('receipt-plan').textContent = sp; document.getElementById('receipt-contact').textContent = cp; document.getElementById('receipt-address').textContent = fa; document.getElementById('receipt-total').textContent = t; document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`Order: ${on}, Plan: ${sp}, Total: ${t}`)}`; receiptModal.classList.remove('hidden'); orderForm.reset(); toggleOrderType('member'); });
+        document.getElementById('close-receipt-btn').addEventListener('click', () => receiptModal.classList.add('hidden'));
+        document.getElementById('download-receipt-btn').addEventListener('click', () => { html2canvas(document.getElementById('receipt-content')).then(canvas => { const imgData = canvas.toDataURL('image/png'), pdf = new jsPDF('p', 'mm', [80, 140]); pdf.addImage(imgData, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), (canvas.height * pdf.internal.pageSize.getWidth()) / canvas.width); pdf.save(`iCleaners-Receipt-${document.getElementById('receipt-order-number').textContent}.pdf`); }); });
+        document.querySelectorAll('.comparison-slider').forEach(slider => { const b = slider.querySelector('.before-image'), h = slider.querySelector('.slider-handle'); let d = false; function m(x){ const r = slider.getBoundingClientRect(); let n = x - r.left; if (n < 0) n = 0; if (n > r.width) n = r.width; const p = (n / r.width) * 100; h.style.left = `${p}%`; b.style.width = `${p}%`; } h.addEventListener('mousedown', (e) => { e.preventDefault(); d = true; }); h.addEventListener('touchstart', (e) => { e.preventDefault(); d = true; }); window.addEventListener('mouseup', () => d = false); window.addEventListener('touchend', () => d = false); window.addEventListener('mousemove', (e) => { if (d) m(e.clientX); }); window.addEventListener('touchmove', (e) => { if (d) m(e.touches[0].clientX); });});
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 }); document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        let cP = 0; function sSP() { const p = [{ t: 'A host just booked a clean!', d: 'For a 2-bed apartment in Kilimani.' }, { t: 'Cleaner finished a job!', d: '1-bedroom studio in Westlands is now sparkling.' }, { t: 'New monthly subscriber!', d: 'A shortlet manager in Lavington just joined.' }, { t: 'Instant dispatch!', d: 'Cleaner en-route to a house on Ngong Road.' }][cP]; document.getElementById('proof-title').textContent = p.t; document.getElementById('proof-details').textContent = p.d; cP = (cP + 1) % 4; } setTimeout(sSP, 1000); setInterval(sSP, 7000);
+        const fab = document.getElementById('fab'); window.addEventListener('scroll', () => { fab.classList.toggle('opacity-0', window.scrollY <= 300); fab.classList.toggle('scale-0', window.scrollY <= 300); });
+    </script>
+</body>
+</html>
+
+
+        .mono {
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        /* Animated Gradient Keyframes */
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Hero Section with Video and Gradient Overlay */
+        .hero-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        #hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: 0;
+            transform: translateX(-50%) translateY(-50%);
+            object-fit: cover;
+        }
+        .hero-bg::before {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: linear-gradient(-45deg, #4f46e5, #3b82f6, #0ea5e9, #22d3ee);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            opacity: 0.85; 
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative; 
+            z-index: 2;
+        }
+        
+        /* Custom animation for social proof pop-up */
+        @keyframes pop-in-out {
+            0%, 100% { transform: translateY(200%); opacity: 0; }
+            10%, 90% { transform: translateY(0); opacity: 1; }
+        }
+        .social-proof-popup { animation: pop-in-out 7s ease-in-out infinite; }
+        
+        /* Animation for elements on scroll */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* Before/After Slider Styling */
+        .comparison-slider { position: relative; width: 100%; overflow: hidden; border-radius: 0.75rem; }
+        .comparison-image { width: 100%; height: auto; display: block; }
+        .before-image { position: absolute; top: 0; left: 0; height: 100%; width: 50%; object-fit: cover; object-position: left; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+        .slider-handle { position: absolute; top: 0; left: 50%; transform: translateX(-50%); height: 100%; width: 4px; background-color: white; cursor: ew-resize; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .slider-icon { width: 40px; height: 40px; background-color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); color: #3b82f6; }
+
+        /* Watermark */
         .watermark-container {
             position: relative;
         }
