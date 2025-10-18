@@ -979,6 +979,11 @@
             }
         });
 
+        document.getElementById('confirm-payment-btn').addEventListener('click', () => {
+            paymentModal.classList.add('hidden');
+            showReceipt();
+        });
+
         document.getElementById('close-receipt-btn').addEventListener('click', () => receiptModal.classList.add('hidden'));
 
         // --- NEW: Function to handle PDF downloads ensuring images are loaded ---
