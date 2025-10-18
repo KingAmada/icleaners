@@ -360,12 +360,7 @@
                 <!-- Earning Pools Section -->
                 <div class="mt-16 bg-gray-100 p-8 rounded-lg shadow-md fade-in">
                     <h3 class="text-2xl font-bold mb-4 text-center">Earn Cash Back with Our Member Earning Pools</h3>
-                    <p class="text-gray-600 mb-6 text-center">As a member, you can earn commissions from our weekly earning pool. We set aside 5% of all orders for the week and divide it among members who placed an order that week.</p>
-                    <div class="bg-blue-50 p-6 rounded-lg">
-                        <p class="font-semibold mb-2">Example:</p>
-                        <p class="text-gray-600">Suppose we have 35 cleanings at KES 999 each: 35 × 999 = KES 34,965. We take 5% = KES 1,748 and divide it among 5 members who ordered that week: 1,748 / 5 ≈ KES 349.60 per person.</p>
-                        <p class="mt-4 text-green-700 font-bold">Get a clean house and cash back – only if you order that week!</p>
-                    </div>
+                    <p class="text-gray-600 mb-6 text-center">We give weekly cashback to our lucky members who have ordered in that week.</p>
                 </div>
             </div>
         </section>
@@ -638,15 +633,15 @@
     <!-- Payment Modal -->
     <div id="payment-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
         <div class="modal-content bg-white rounded-lg shadow-2xl max-w-md w-full text-center p-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">Complete Your Membership</h2>
-            <p class="text-gray-600 mb-6">You've made the right decision, your property deserves the iCleaners touch!</p>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Complete Your Order</h2>
+            <p class="text-gray-600 mb-6">All orders are confirmed after payment. Please complete the payment to dispatch your cleaner.</p>
             <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <h3 class="font-semibold text-lg text-gray-700">M-Pesa Payment Details</h3>
                 <p class="text-gray-500 text-sm mb-4">Please use the details below to complete your payment.</p>
                 <p class="text-lg">Paybill / Till Number: <span class="font-bold text-blue-600">iCleaners LTD</span></p>
                 <p class="text-lg">Account / Phone: <span class="font-bold text-blue-600">0748118655</span></p>
             </div>
-            <button class="modal-close-btn mt-6 w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">Finish</button>
+            <button id="confirm-payment-btn" class="mt-6 w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">I've Paid - Confirm Order</button>
         </div>
     </div>
 
@@ -941,9 +936,9 @@
                 sp: fd.get('plan'),
                 cp: fd.get('contact_person'),
                 fa: `${fd.get('apt_number')}, ${fd.get('street_name')}`,
-                baseTotal: (currentOrderType === 'member') ? 'Membership' : `KES ${Number(planSelect.options[planSelect.selectedIndex].dataset.price).toLocaleString()}`,
                 basePrice: (currentOrderType === 'member') ? 0 : Number(planSelect.options[planSelect.selectedIndex].dataset.price),
-                extra: 0
+                extra: 0,
+                type: currentOrderType
             };
             upsellModal.classList.remove('hidden');
             orderForm.reset();
@@ -951,15 +946,15 @@
         });
 
         function showReceipt() {
-            let t = (typeof orderData.baseTotal === 'number') ? orderData.baseTotal + orderData.extra : orderData.baseTotal;
-            if (typeof t === 'number') t = `KES ${t.toLocaleString()}`;
+            let t = orderData.basePrice + orderData.extra;
+            let totalDisplay = (orderData.type === 'member') ? 'Membership' : `KES ${t.toLocaleString()}`;
             document.getElementById('receipt-order-number').textContent = orderData.on;
             document.getElementById('receipt-date').textContent = orderData.od;
             document.getElementById('receipt-plan').textContent = orderData.sp;
             document.getElementById('receipt-contact').textContent = orderData.cp;
             document.getElementById('receipt-address').textContent = orderData.fa;
-            document.getElementById('receipt-total').textContent = t;
-            document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`Order: ${orderData.on}, Plan: ${orderData.sp}, Total: ${t}`)}`;
+            document.getElementById('receipt-total').textContent = totalDisplay;
+            document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`Order: ${orderData.on}, Plan: ${orderData.sp}, Total: ${totalDisplay}`)}`;
             receiptModal.classList.remove('hidden');
         }
 
@@ -970,11 +965,24 @@
             const custom = fd.get('custom_instructions').trim();
             orderData.extra = (checkedItems * 500) + (custom ? 500 : 0);
             upsellModal.classList.add('hidden');
-            showReceipt();
+            if (orderData.type === 'onetime') {
+                paymentModal.classList.remove('hidden');
+            } else {
+                showReceipt();
+            }
         });
 
         document.getElementById('skip-upsell').addEventListener('click', () => {
             upsellModal.classList.add('hidden');
+            if (orderData.type === 'onetime') {
+                paymentModal.classList.remove('hidden');
+            } else {
+                showReceipt();
+            }
+        });
+
+        document.getElementById('confirm-payment-btn').addEventListener('click', () => {
+            paymentModal.classList.add('hidden');
             showReceipt();
         });
 
@@ -1073,7 +1081,7 @@
 
         // --- Scroll Animations & Social Proof ---
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 }); document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-        let cP = 0; function sSP() { const p = [{ t: 'A host just booked a clean!', d: 'For a 2-bed apartment in Kilimani.' }, { t: 'Cleaner finished a job!', d: '1-bedroom studio in Westlands is now sparkling.' }, { t: 'New monthly subscriber!', d: 'A shortlet manager in Lavington just joined.' }, { t: 'Instant dispatch!', d: 'Cleaner en-route to a house on Ngong Road.' }][cP]; document.getElementById('proof-title').textContent = p.t; document.getElementById('proof-details').textContent = p.d; cP = (cP + 1) % 4; } setTimeout(sSP, 1000); setInterval(sSP, 7000);
+        let cP = 0; function sSP() { const p = [{ t: 'A host just booked a clean!', d: 'For a 2-bed apartment in Kilimani.' }, { t: 'Cleaner finished a job!', d: '1-bedroom studio in Westlands is now sparkling.' }, { t: 'New monthly subscriber!', d: 'A shortlet manager in Lavington just joined.' }, { t: 'Instant dispatch!', d: 'Cleaner en-route to a house on Ngong Road.' }, { t: 'Lucky winner!', d: 'A member in Kilimani just got KES 350 cashback this week!' }, { t: 'Cashback alert!', d: 'Host in Westlands received KES 500 from this week\'s pool!' }][cP]; document.getElementById('proof-title').textContent = p.t; document.getElementById('proof-details').textContent = p.d; cP = (cP + 1) % 6; } setTimeout(sSP, 1000); setInterval(sSP, 7000);
         const fab = document.getElementById('fab'); window.addEventListener('scroll', () => { fab.classList.toggle('opacity-0', window.scrollY <= 300); fab.classList.toggle('scale-0', window.scrollY <= 300); });
     </script>
 </body>
