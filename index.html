@@ -193,6 +193,16 @@
             </div>
         </section>
 
+        <!-- Partnership Section -->
+        <section class="bg-gray-100 py-4 text-center">
+            <p class="text-gray-500 uppercase text-sm font-semibold mb-2">TRUSTED BY HOSTS AT NAIROBI'S LEADING APARTMENTS</p>
+            <div class="flex justify-center space-x-8 text-gray-400 text-lg">
+                <span>Le'Mac</span>
+                <span>Riverside Pearl</span>
+                <span>One West Park</span>
+            </div>
+        </section>
+
         <!-- Stats & Social Proof Bar -->
         <section class="bg-slate-800 text-white">
             <div class="container mx-auto px-6 py-8">
@@ -544,9 +554,6 @@
                  <div class="col-span-2 lg:col-span-1"><h4 class="font-semibold mb-4">Follow Us</h4><div class="flex space-x-4"><a href="#" class="text-gray-400 hover:text-white"><i data-feather="facebook"></i></a><a href="#" class="text-gray-400 hover:text-white"><i data-feather="instagram"></i></a><a href="#" class="text-gray-400 hover:text-white"><i data-feather="twitter"></i></a></div></div>
             </div>
             <div class="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-gray-500"><p>&copy; 2024 iCleaners Kenya. All Rights Reserved.</p></div>
-            <div class="mt-4 text-center text-sm text-gray-400">
-                <p>In partnership with: Kilimani Heights, Ngong View Apartments, Westlands Residences</p>
-            </div>
         </div>
     </footer>
     
@@ -947,7 +954,7 @@
 
         function showReceipt() {
             let t = orderData.basePrice + orderData.extra;
-            let totalDisplay = (orderData.type === 'member') ? 'Membership' : `KES ${t.toLocaleString()}`;
+            let totalDisplay = (orderData.type === 'member' && t === 0) ? 'Included in Membership' : `KES ${t.toLocaleString()}`;
             document.getElementById('receipt-order-number').textContent = orderData.on;
             document.getElementById('receipt-date').textContent = orderData.od;
             document.getElementById('receipt-plan').textContent = orderData.sp;
@@ -965,7 +972,7 @@
             const custom = fd.get('custom_instructions').trim();
             orderData.extra = (checkedItems * 500) + (custom ? 500 : 0);
             upsellModal.classList.add('hidden');
-            if (orderData.type === 'onetime') {
+            if (orderData.type === 'onetime' || orderData.extra > 0) {
                 paymentModal.classList.remove('hidden');
             } else {
                 showReceipt();
@@ -974,7 +981,7 @@
 
         document.getElementById('skip-upsell').addEventListener('click', () => {
             upsellModal.classList.add('hidden');
-            if (orderData.type === 'onetime') {
+            if (orderData.type === 'onetime' || orderData.extra > 0) {
                 paymentModal.classList.remove('hidden');
             } else {
                 showReceipt();
@@ -1085,4 +1092,4 @@
         const fab = document.getElementById('fab'); window.addEventListener('scroll', () => { fab.classList.toggle('opacity-0', window.scrollY <= 300); fab.classList.toggle('scale-0', window.scrollY <= 300); });
     </script>
 </body>
-</html>
+                      </html>
