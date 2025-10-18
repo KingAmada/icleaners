@@ -77,6 +77,13 @@
             z-index: 2;
         }
         
+        /* Animated Gradient for Sections */
+        .animated-gradient {
+            background: linear-gradient(-45deg, #4f46e5, #3b82f6, #0ea5e9, #22d3ee);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
         /* Custom animation for social proof pop-up */
         @keyframes pop-in-out {
             0%, 100% { transform: translateY(200%); opacity: 0; }
@@ -134,6 +141,12 @@
             background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
             aspect-ratio: 85.6 / 53.98;
         }
+
+        /* Testimonials Carousel */
+        .testimonial-carousel { position: relative; overflow: hidden; }
+        .testimonial-slides { display: flex; transition: transform 0.5s ease; }
+        .testimonial-slide { min-width: 100%; padding: 1rem; box-sizing: border-box; }
+        .testimonial-slide.active { transform: translateX(0); }
 
     </style>
 </head>
@@ -252,6 +265,42 @@
             </div>
         </section>
 
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 fade-in">What Our Clients Say</h2>
+                <p class="text-gray-600 mb-12 max-w-2xl mx-auto fade-in">Hear from satisfied hosts who rely on iCleaners for their cleaning needs.</p>
+                <div class="testimonial-carousel max-w-3xl mx-auto shadow-lg rounded-lg bg-gray-50 p-6 fade-in">
+                    <div class="testimonial-slides">
+                        <div class="testimonial-slide">
+                            <p class="text-gray-600 italic mb-4">"iCleaners saved my Airbnb business! The 10-minute dispatch is a game-changer."</p>
+                            <p class="font-semibold text-blue-600">- Jane Doe, Kilimani Host</p>
+                            <div class="text-yellow-400 mt-2">★★★★★</div>
+                        </div>
+                        <div class="testimonial-slide">
+                            <p class="text-gray-600 italic mb-4">"Reliable, fast, and thorough. My guests always comment on how clean the place is."</p>
+                            <p class="font-semibold text-blue-600">- John Smith, Westlands Property Manager</p>
+                            <div class="text-yellow-400 mt-2">★★★★★</div>
+                        </div>
+                        <div class="testimonial-slide">
+                            <p class="text-gray-600 italic mb-4">"The membership plan is worth every penny. Plus, the cash back from the earning pool is a nice bonus!"</p>
+                            <p class="font-semibold text-blue-600">- Sarah Lee, Ngong Road Host</p>
+                            <div class="text-yellow-400 mt-2">★★★★★</div>
+                        </div>
+                        <div class="testimonial-slide">
+                            <p class="text-gray-600 italic mb-4">"Excellent service and great value. The upsell options for supplies are convenient."</p>
+                            <p class="font-semibold text-blue-600">- Michael Kimani, Lavington Resident</p>
+                            <div class="text-yellow-400 mt-2">★★★★★</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-6 space-x-4">
+                        <button id="prev-testimonial" class="bg-blue-100 text-blue-600 p-2 rounded-full hover:bg-blue-200"><i data-feather="chevron-left"></i></button>
+                        <button id="next-testimonial" class="bg-blue-100 text-blue-600 p-2 rounded-full hover:bg-blue-200"><i data-feather="chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Plans Section -->
         <section id="plans" class="py-20">
             <div class="container mx-auto px-6">
@@ -305,6 +354,17 @@
                            🎁 Includes 1 FREE Deep Clean Monthly!
                         </div>
                         <button class="member-btn w-full bg-blue-100 text-blue-600 font-semibold py-3 rounded-lg hover:bg-blue-200 transition">Become a Member</button>
+                    </div>
+                </div>
+
+                <!-- Earning Pools Section -->
+                <div class="mt-16 bg-gray-100 p-8 rounded-lg shadow-md fade-in">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Earn Cash Back with Our Member Earning Pools</h3>
+                    <p class="text-gray-600 mb-6 text-center">As a member, you can earn commissions from our weekly earning pool. We set aside 5% of all orders for the week and divide it among members who placed an order that week.</p>
+                    <div class="bg-blue-50 p-6 rounded-lg">
+                        <p class="font-semibold mb-2">Example:</p>
+                        <p class="text-gray-600">Suppose we have 35 cleanings at KES 999 each: 35 × 999 = KES 34,965. We take 5% = KES 1,748 and divide it among 5 members who ordered that week: 1,748 / 5 ≈ KES 349.60 per person.</p>
+                        <p class="mt-4 text-green-700 font-bold">Get a clean house and cash back – only if you order that week!</p>
                     </div>
                 </div>
             </div>
@@ -489,6 +549,9 @@
                  <div class="col-span-2 lg:col-span-1"><h4 class="font-semibold mb-4">Follow Us</h4><div class="flex space-x-4"><a href="#" class="text-gray-400 hover:text-white"><i data-feather="facebook"></i></a><a href="#" class="text-gray-400 hover:text-white"><i data-feather="instagram"></i></a><a href="#" class="text-gray-400 hover:text-white"><i data-feather="twitter"></i></a></div></div>
             </div>
             <div class="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-gray-500"><p>&copy; 2024 iCleaners Kenya. All Rights Reserved.</p></div>
+            <div class="mt-4 text-center text-sm text-gray-400">
+                <p>In partnership with: Kilimani Heights, Ngong View Apartments, Westlands Residences</p>
+            </div>
         </div>
     </footer>
     
@@ -635,6 +698,42 @@
     <!-- Floating Action Button -->
     <a href="#order" id="fab" title="Quick Order" class="fixed bottom-6 right-6 bg-pink-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:bg-pink-600 z-30 opacity-0 transform scale-0 transition-opacity transition-transform duration-300"><i data-feather="zap" class="w-8 h-8"></i></a>
     
+    <!-- Upsell Modal -->
+    <div id="upsell-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-white rounded-lg shadow-2xl max-w-md w-full p-8 text-center">
+            <h2 class="text-2xl font-bold mb-4">Add Essentials to Your Order</h2>
+            <p class="text-gray-600 mb-6">You might be running out of detergents – better order now to avoid after-service orders!</p>
+            <form id="upsell-form">
+                <div class="space-y-4 mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="liquid_detergents" class="h-5 w-5 text-blue-600">
+                        <span class="ml-2 text-gray-700">Liquid Detergents (KES 500)</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="soaps" class="h-5 w-5 text-blue-600">
+                        <span class="ml-2 text-gray-700">Soaps (KES 500)</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tissues" class="h-5 w-5 text-blue-600">
+                        <span class="ml-2 text-gray-700">Tissues (KES 500)</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="water" class="h-5 w-5 text-blue-600">
+                        <span class="ml-2 text-gray-700">Water (KES 500)</span>
+                    </label>
+                    <div>
+                        <label for="custom_instructions" class="block text-sm font-medium text-gray-700 mb-1">Custom Order & Instructions (KES 500 if added)</label>
+                        <textarea id="custom_instructions" name="custom_instructions" rows="3" class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <button type="button" id="skip-upsell" class="w-full bg-gray-300 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-400">Skip</button>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700">Add to Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Receipt Modal -->
     <div id="receipt-modal" class="modal hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
         <div class="bg-gray-50 rounded-lg shadow-2xl max-w-sm w-full modal-content">
@@ -797,14 +896,88 @@
         });
         document.querySelectorAll('.plan-card .plan-frequency').forEach(el => el.textContent = '/mo for 8 Cleans');
 
+        // --- Testimonials Carousel Logic ---
+        const testimonialSlides = document.querySelector('.testimonial-slides');
+        const slides = document.querySelectorAll('.testimonial-slide');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            testimonialSlides.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        document.getElementById('next-testimonial').addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        });
+
+        document.getElementById('prev-testimonial').addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        });
+
+        // Auto-slide every 5 seconds
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }, 5000);
+
         // --- Sliders, Modals, FAQ, and other existing logic ---
         document.querySelectorAll('[data-modal-trigger]').forEach(trigger => trigger.addEventListener('click', (e) => { e.preventDefault(); document.getElementById(`${trigger.dataset.modalTrigger}-modal`).classList.remove('hidden'); }));
         document.querySelectorAll('.modal-close-btn').forEach(button => button.addEventListener('click', () => button.closest('.modal').classList.add('hidden')));
         document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); }));
         document.getElementById('faq-accordion').addEventListener('click', (e) => { const q = e.target.closest('.faq-question'); if(q) { const a = q.nextElementSibling, i = q.querySelector('i'), o = !a.style.maxHeight; document.querySelectorAll('#faq-accordion .faq-answer').forEach(ans => ans.style.maxHeight = null); document.querySelectorAll('#faq-accordion .faq-question i').forEach(ic => ic.style.transform = 'rotate(0deg)'); if(o){ a.style.maxHeight = a.scrollHeight + "px"; i.style.transform = 'rotate(45deg)';}}});
         const orderForm = document.getElementById('order-form');
+        const upsellModal = document.getElementById('upsell-modal');
+        const upsellForm = document.getElementById('upsell-form');
         const receiptModal = document.getElementById('receipt-modal');
-        orderForm.addEventListener('submit', function(event) { event.preventDefault(); const fd = new FormData(orderForm); const on = `iC-${Math.floor(100000 + Math.random() * 900000)}`, od = new Date().toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' }), sp = fd.get('plan'), cp = fd.get('contact_person'), fa = `${fd.get('apt_number')}, ${fd.get('street_name')}`; let t = (currentOrderType === 'member') ? 'Membership' : `KES ${Number(planSelect.options[planSelect.selectedIndex].dataset.price).toLocaleString()}`; document.getElementById('receipt-order-number').textContent = on; document.getElementById('receipt-date').textContent = od; document.getElementById('receipt-plan').textContent = sp; document.getElementById('receipt-contact').textContent = cp; document.getElementById('receipt-address').textContent = fa; document.getElementById('receipt-total').textContent = t; document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`Order: ${on}, Plan: ${sp}, Total: ${t}`)}`; receiptModal.classList.remove('hidden'); orderForm.reset(); toggleOrderType('member'); });
+        let orderData = {};
+
+        orderForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fd = new FormData(orderForm);
+            orderData = {
+                on: `iC-${Math.floor(100000 + Math.random() * 900000)}`,
+                od: new Date().toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' }),
+                sp: fd.get('plan'),
+                cp: fd.get('contact_person'),
+                fa: `${fd.get('apt_number')}, ${fd.get('street_name')}`,
+                baseTotal: (currentOrderType === 'member') ? 'Membership' : `KES ${Number(planSelect.options[planSelect.selectedIndex].dataset.price).toLocaleString()}`,
+                basePrice: (currentOrderType === 'member') ? 0 : Number(planSelect.options[planSelect.selectedIndex].dataset.price),
+                extra: 0
+            };
+            upsellModal.classList.remove('hidden');
+            orderForm.reset();
+            toggleOrderType('member');
+        });
+
+        function showReceipt() {
+            let t = (typeof orderData.baseTotal === 'number') ? orderData.baseTotal + orderData.extra : orderData.baseTotal;
+            if (typeof t === 'number') t = `KES ${t.toLocaleString()}`;
+            document.getElementById('receipt-order-number').textContent = orderData.on;
+            document.getElementById('receipt-date').textContent = orderData.od;
+            document.getElementById('receipt-plan').textContent = orderData.sp;
+            document.getElementById('receipt-contact').textContent = orderData.cp;
+            document.getElementById('receipt-address').textContent = orderData.fa;
+            document.getElementById('receipt-total').textContent = t;
+            document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`Order: ${orderData.on}, Plan: ${orderData.sp}, Total: ${t}`)}`;
+            receiptModal.classList.remove('hidden');
+        }
+
+        upsellForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fd = new FormData(upsellForm);
+            const checkedItems = ['liquid_detergents', 'soaps', 'tissues', 'water'].filter(item => fd.get(item) === 'on').length;
+            const custom = fd.get('custom_instructions').trim();
+            orderData.extra = (checkedItems * 500) + (custom ? 500 : 0);
+            upsellModal.classList.add('hidden');
+            showReceipt();
+        });
+
+        document.getElementById('skip-upsell').addEventListener('click', () => {
+            upsellModal.classList.add('hidden');
+            showReceipt();
+        });
+
         document.getElementById('close-receipt-btn').addEventListener('click', () => receiptModal.classList.add('hidden'));
 
         // --- NEW: Function to handle PDF downloads ensuring images are loaded ---
@@ -905,4 +1078,3 @@
     </script>
 </body>
 </html>
-
