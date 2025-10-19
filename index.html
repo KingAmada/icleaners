@@ -352,7 +352,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="mt-6 w-full bg-blue-100 text-blue-600 font-semibold py-3 rounded-lg hover:bg-blue-200 transition">Select Plan</button>
+                        <button onclick="toggleOrderType('onetime'); location.href='#order';" class="mt-6 w-full bg-cyan-600 text-white font-semibold py-3 rounded-lg hover:bg-cyan-700 transition">Order Now</button>
                     </div>
                     <!-- Monthly Plan -->
                     <div class="bg-white p-8 rounded-lg shadow-xl transition-shadow fade-in border-2 border-cyan-500 relative transform md:scale-105">
@@ -385,7 +385,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="mt-6 w-full bg-cyan-500 text-white font-semibold py-3 rounded-lg hover:bg-cyan-600 transition">Select Plan</button>
+                        <button class="member-btn mt-6 w-full bg-cyan-500 text-white font-semibold py-3 rounded-lg hover:bg-cyan-600 transition">Select Plan</button>
                     </div>
                     <!-- Unlimited Plan -->
                     <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow fade-in border border-gray-200">
@@ -418,7 +418,7 @@
                             </div>
                         </div>
                         <p class="text-xs text-gray-500 mt-4">*Fair use: 1 clean/day per unit, soft cap 25 per month</p>
-                        <button class="mt-6 w-full bg-blue-100 text-blue-600 font-semibold py-3 rounded-lg hover:bg-blue-200 transition">Select Plan</button>
+                        <button class="member-btn mt-6 w-full bg-cyan-500 text-white font-semibold py-3 rounded-lg hover:bg-cyan-600 transition">Select Plan</button>
                     </div>
                 </div>
 
@@ -532,7 +532,7 @@
                         <div class="faq-answer px-5 pb-5 text-gray-600">
                            <p>We offer two main membership tiers:</p>
                            <ul class="list-disc ml-5 mt-2 space-y-2">
-                               <li><b>Standard Membership:</b> This is our base plan which includes 8 cleaning sessions per month (roughly twice a week). It's perfect for regular upkeep.</li>
+                               <li><b>Monthly Membership:</b> This is our base plan which includes 8 cleaning sessions per month (roughly twice a week). It's perfect for regular upkeep.</li>
                                <li><b>Unlimited Membership:</b> For hosts with high turnover, this plan offers unlimited cleaning requests for a fixed monthly fee, which is 30% more than the standard rate.</li>
                            </ul>
                            <p class="mt-2"><b>Great news!</b> Unlimited members receive one <b>FREE deep cleaning service</b> once every month as a thank you for being part of the iCleaners family.</p>
@@ -640,7 +640,7 @@
                      <div>
                         <label for="reg-membership-type" class="block text-sm font-medium text-gray-700">Membership Type</label>
                         <select id="reg-membership-type" name="membership_type" class="mt-1 w-full p-2 border border-gray-300 rounded-md">
-                            <option value="Standard">Standard (8 Cleans/Month)</option>
+                            <option value="Monthly">Monthly (8 Cleans)</option>
                             <option value="Unlimited">Unlimited</option>
                         </select>
                     </div>
@@ -939,12 +939,17 @@
         let currentOrderType = 'member';
 
         const memberPlans = [
-            { text: 'Standard - Studio / 1 Bed', value: 'Standard - Studio / 1 Bed' }, { text: 'Unlimited - Studio / 1 Bed', value: 'Unlimited - Studio / 1 Bed' },
-            { text: 'Standard - 2 & 3 Bed', value: 'Standard - 2 & 3 Bed' }, { text: 'Unlimited - 2 & 3 Bed', value: 'Unlimited - 2 & 3 Bed' },
-            { text: 'Standard - Specialized Home', value: 'Standard - Specialized Home' }, { text: 'Unlimited - Specialized Home', value: 'Unlimited - Specialized Home' }
+            { text: 'Monthly (8 Cleans) - 1 Bedroom', value: 'Monthly (8 Cleans) - 1 Bedroom' },
+            { text: 'Monthly (8 Cleans) - 2 Bedroom', value: 'Monthly (8 Cleans) - 2 Bedroom' },
+            { text: 'Monthly (8 Cleans) - 3 Bedroom', value: 'Monthly (8 Cleans) - 3 Bedroom' },
+            { text: 'Unlimited - 1 Bedroom', value: 'Unlimited - 1 Bedroom' },
+            { text: 'Unlimited - 2 Bedroom', value: 'Unlimited - 2 Bedroom' },
+            { text: 'Unlimited - 3 Bedroom', value: 'Unlimited - 3 Bedroom' }
         ];
         const onetimePlans = [
-            { text: '1 Bed Dispatch - KES 799', value: '1 Bed Dispatch', price: 799 }, { text: '2 & 3 Bed Dispatch - KES 999', value: '2 & 3 Bed Dispatch', price: 999 },
+            { text: '1 Bedroom Dispatch - KES 399', value: '1 Bedroom Dispatch', price: 399 },
+            { text: '2 Bedroom Dispatch - KES 799', value: '2 Bedroom Dispatch', price: 799 },
+            { text: '3 Bedroom Dispatch - KES 999', value: '3 Bedroom Dispatch', price: 999 }
         ];
 
         function updatePlanOptions(type) {
@@ -1077,7 +1082,7 @@
             document.getElementById('membership-receipt-type').textContent = membershipData.membershipType;
             document.getElementById('membership-receipt-orders-left').textContent = ordersLeft;
             document.getElementById('membership-receipt-name').textContent = membershipData.name;
-            document.getElementById('membership-receipt-total').textContent = `KES ${membershipData.membershipType === 'Unlimited' ? 'Unlimited Plan Price' : 'Standard Plan Price'}`;
+            document.getElementById('membership-receipt-total').textContent = `KES ${membershipData.membershipType === 'Unlimited' ? 'Unlimited Plan Price' : 'Monthly Plan Price'}`;
             const qrData = `Member No: ${membershipData.memberNumber}, Type: ${membershipData.membershipType}, Orders Left: ${ordersLeft}`;
             document.getElementById('membership-qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}`;
             membershipReceiptModal.classList.remove('hidden');
